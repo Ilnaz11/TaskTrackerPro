@@ -1,5 +1,7 @@
 package ru.baymukhametov.TaskTrackerPro.dto;
 
-public class TaskStatusUpdateDto {
+import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
 
+public class TaskStatusUpdateDto {
+    private TaskStatus status;
 }
