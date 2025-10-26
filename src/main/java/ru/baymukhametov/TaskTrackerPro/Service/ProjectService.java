@@ -2,16 +2,17 @@ package ru.baymukhametov.TaskTrackerPro.Service;
 
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
+import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 
 import java.util.Optional;
 
 @Service
 public interface ProjectService {
 
-    Project createProject(Project project);
+    ProjectCreateDto createProject(Project project);
     void deleteProject(Long id);
-    Optional<Project> findById(Long id);
-    Project updateProject();
+    Optional<ProjectCreateDto> findById(Long id);
+    ProjectCreateDto updateProject(Long id, ProjectCreateDto projectCreateDto);
 }
 //o	создания и удаления сущностей;
 //o	поиска по ID;
