@@ -8,6 +8,7 @@ import ru.baymukhametov.TaskTrackerPro.dto.UserRequestDto;
 import ru.baymukhametov.TaskTrackerPro.dto.UserResponseDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.UserMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -19,6 +20,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto createUser(User user) {
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public List<UserResponseDto> getAllUsers() {
+        List<User> user = userRepository.findAll();
+        return userMapper.toDtoList(user);
     }
 
     @Override
