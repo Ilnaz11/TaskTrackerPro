@@ -6,7 +6,7 @@ import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 public class ProjectMapper {
 
     public ProjectCreateDto toDto(Project project) {
-        if (project != null) {
+        if (project == null) {
             return null;
         }
             ProjectCreateDto projectCreateDto = new ProjectCreateDto();

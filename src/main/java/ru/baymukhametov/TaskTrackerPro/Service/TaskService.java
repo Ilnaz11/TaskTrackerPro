@@ -11,7 +11,7 @@ public interface TaskService {
 
     TaskCreateDto createTask(Task task);
     void deleteTask(Long id);
-    Optional<Task> findById(Long id);
+    Optional<TaskCreateDto> findById(Long id);
     TaskCreateDto updateTask(Long id, TaskCreateDto taskCreateDto);
 }
 //o	создания и удаления сущностей;

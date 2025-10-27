@@ -23,8 +23,8 @@ public class Task {
     private TaskStatus status = TaskStatus.NEW;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User rightHolder;
+    @JoinColumn(name = "executor_id")
+    private User executor;
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;

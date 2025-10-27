@@ -1,9 +1,14 @@
 package ru.baymukhametov.TaskTrackerPro.dto;
 
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
 public class TaskCreateDto {
-    private String header;
+    private String title;
     private String description;
-    private String term;
+    private LocalDateTime dueDate;
     private Long projectId;
-    private Long devId;
+    private Long executorId;
 }
