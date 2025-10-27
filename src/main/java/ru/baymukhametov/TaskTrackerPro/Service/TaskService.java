@@ -14,6 +14,4 @@ public interface TaskService {
     Optional<TaskCreateDto> findById(Long id);
     TaskCreateDto updateTask(Long id, TaskCreateDto taskCreateDto);
 }
-//o	создания и удаления сущностей;
-//o	поиска по ID;
-//o	обновления данных.
+

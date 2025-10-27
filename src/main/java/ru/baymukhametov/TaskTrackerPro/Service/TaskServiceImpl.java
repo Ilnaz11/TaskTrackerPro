@@ -29,7 +29,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Optional<TaskCreateDto> findById(Long id) {
         Optional<Task> optionalTask = taskRepository.findById(id);
-        Task task = optionalTask.orElseThrow(() -> new RuntimeException("Not found Task"));
+        Task task = optionalTask.orElseThrow(() -> new RuntimeException("Not found Task id: " + id));
 
         return optionalTask.map(taskMapper::toDto);
     }
@@ -49,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
             task.setDueDate(taskCreateDto.getDueDate());
         }
 
-        Task task1 = taskRepository.save(task);
-        return taskMapper.toDto(task1);
+        Task updatedTask = taskRepository.save(task);
+        return taskMapper.toDto(updatedTask);
     }
 }
