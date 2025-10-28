@@ -9,5 +9,4 @@ public class TaskTrackerProApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TaskTrackerProApplication.class, args);
 	}
-
 }

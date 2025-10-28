@@ -1,12 +1,16 @@
 package ru.baymukhametov.TaskTrackerPro.Service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.target.LazyInitTargetSource;
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
 import ru.baymukhametov.TaskTrackerPro.Repository.TaskRepository;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
+import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
+import ru.baymukhametov.TaskTrackerPro.dto.TaskStatusUpdateDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.TaskMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,8 +21,14 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper taskMapper;
 
     @Override
-    public TaskCreateDto createTask(Task task) {
+    public TaskResponseDto createTask(Task task) {
         return taskMapper.toDto(task);
+    }
+
+    @Override
+    public List<TaskResponseDto> getAllTasks() {
+        List<Task> tasks = taskRepository.findAll();
+        return taskMapper.toDtoList(tasks);
     }
 
     @Override
@@ -27,7 +37,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Optional<TaskCreateDto> findById(Long id) {
+    public Optional<TaskResponseDto> findById(Long id) {
         Optional<Task> optionalTask = taskRepository.findById(id);
         Task task = optionalTask.orElseThrow(() -> new RuntimeException("Not found Task id: " + id));
 
@@ -35,7 +45,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskCreateDto updateTask(Long id, TaskCreateDto taskCreateDto) {
+    public TaskResponseDto updateTask(Long id, TaskCreateDto taskCreateDto, TaskStatusUpdateDto taskStatusUpdateDto) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found Task"));
 
@@ -47,6 +57,9 @@ public class TaskServiceImpl implements TaskService {
         }
         if (taskCreateDto.getDueDate() != null) {
             task.setDueDate(taskCreateDto.getDueDate());
+        }
+        if (taskStatusUpdateDto.getStatus() != null) {
+            task.setStatus(taskStatusUpdateDto.getStatus());
         }
 
         Task updatedTask = taskRepository.save(task);

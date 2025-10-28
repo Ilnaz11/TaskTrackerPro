@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponseDto createUser(User user) {
+    public UserResponseDto createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
@@ -28,18 +28,19 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @DeleteMapping
-    public void deleteUser(Long id) {
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 
     @GetMapping("/{id}")
-    public Optional<UserResponseDto> findById(Long id) {
+    public Optional<UserResponseDto> findById(@PathVariable Long id) {
         return userService.findById(id);
     }
 
     @PutMapping("/{id}/update")
-    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto) {
+    public UserResponseDto updateUser(@PathVariable Long id,
+                                      @RequestBody UserRequestDto userRequestDto) {
         return userService.updateUser(id, userRequestDto);
     }
 
