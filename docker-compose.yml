@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  postgres-db:
+    image: postgres:15
+    container_name: TaskTrackerPro
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=tasktrackerpro
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
