@@ -2,14 +2,17 @@ package ru.baymukhametov.TaskTrackerPro.mapper;
 
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
+import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
+
+import java.util.List;
 
 public class ProjectMapper {
 
-    public ProjectCreateDto toDto(Project project) {
+    public ProjectResponseDto toDto(Project project) {
         if (project == null) {
             return null;
         }
-            ProjectCreateDto projectCreateDto = new ProjectCreateDto();
+            ProjectResponseDto projectCreateDto = new ProjectResponseDto();
 
             projectCreateDto.setName(project.getName());
             projectCreateDto.setDescription(project.getDescription());
@@ -29,5 +32,15 @@ public class ProjectMapper {
         project.setId(projectCreateDto.getManagerId());
 
         return project;
+    }
+
+    public List<ProjectResponseDto> toDtoList(List<Project> projects) {
+        if (projects == null) {
+            return null;
+        }
+        return projects
+                .stream()
+                .map(this::toDto)
+                .toList();
     }
 }
