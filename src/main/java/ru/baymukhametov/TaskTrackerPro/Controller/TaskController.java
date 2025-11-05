@@ -1,6 +1,7 @@
 package ru.baymukhametov.TaskTrackerPro.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
 import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
@@ -34,6 +35,11 @@ public class TaskController {
     @GetMapping("/tasks/status/{status}")
     public List<TaskResponseDto> findByStatus(TaskStatus taskStatus) {
         return taskService.getTaskFromStatus(taskStatus);
+    }
+
+    @GetMapping("/tasks/assignee/{userId}")
+    public List<TaskResponseDto> findByUser(Long id) {
+        return taskService.getTaskFromUser(id);
     }
 
     @GetMapping
