@@ -2,9 +2,11 @@ package ru.baymukhametov.TaskTrackerPro.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
 import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
 import ru.baymukhametov.TaskTrackerPro.Entity.User;
+import ru.baymukhametov.TaskTrackerPro.Repository.ProjectRepository;
 import ru.baymukhametov.TaskTrackerPro.Repository.TaskRepository;
 import ru.baymukhametov.TaskTrackerPro.Repository.UserRepository;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
@@ -19,6 +21,7 @@ import java.util.Optional;
 @Service
 public class TaskServiceImpl implements TaskService {
 
+    private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
@@ -51,7 +54,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskResponseDto> getTaskFromStatus(TaskStatus taskStatus) {
         List<Task> task = taskRepository.findByStatus(taskStatus);
-
         return taskMapper.toDtoList(task);
     }
 
@@ -83,5 +85,13 @@ public class TaskServiceImpl implements TaskService {
 
         Task updatedTask = taskRepository.save(task);
         return taskMapper.toDto(updatedTask);
+    }
+
+    @Override
+    public List<TaskResponseDto> getTasksFromProject(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found Project"));
+        List<Task> tasks = taskRepository.findByProject(project);
+        return taskMapper.toDtoList(tasks);
     }
 }

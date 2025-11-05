@@ -1,7 +1,6 @@
 package ru.baymukhametov.TaskTrackerPro.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
 import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
@@ -47,6 +46,11 @@ public class TaskController {
         return taskService.getAllTasks();
     }
 
+    @GetMapping("/tasks/project/{projectId}")
+    public List<TaskResponseDto> getProjectTasks(Long id) {
+        return taskService.getTasksFromProject(id);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
@@ -60,9 +64,3 @@ public class TaskController {
     }
 
 }
-
-//Этап 9. Фильтрация
-//Добавь в TaskController новые запросы:
-//1.	/tasks/status/{status} — получить задачи по статусу.
-//2.	/tasks/assignee/{userId} — получить задачи определённого пользователя.
-//3.	/tasks/project/{projectId} — получить задачи проекта.

@@ -20,6 +20,7 @@ public interface TaskService {
     List<TaskResponseDto> getTaskFromStatus(TaskStatus taskStatus);
     Optional<TaskResponseDto> findById(Long id);
     TaskResponseDto updateTask(Long id, TaskCreateDto taskCreateDto, TaskStatusUpdateDto taskStatusUpdateDto);
+    List<TaskResponseDto> getTasksFromProject(Long id);
 }
 
-//2.	/tasks/assignee/{userId} — получить задачи определённого пользователя.
+//3.	/tasks/project/{projectId} — получить задачи проекта.
