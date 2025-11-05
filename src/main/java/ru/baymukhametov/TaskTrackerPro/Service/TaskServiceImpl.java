@@ -1,10 +1,12 @@
 package ru.baymukhametov.TaskTrackerPro.Service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.aop.target.LazyInitTargetSource;
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
+import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
+import ru.baymukhametov.TaskTrackerPro.Entity.User;
 import ru.baymukhametov.TaskTrackerPro.Repository.TaskRepository;
+import ru.baymukhametov.TaskTrackerPro.Repository.UserRepository;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskStatusUpdateDto;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @Service
 public class TaskServiceImpl implements TaskService {
 
+    private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
 
@@ -34,6 +37,22 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TaskResponseDto> getTaskFromUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found User"));
+        List<Task> tasks = taskRepository.findByUser(user);
+
+        return taskMapper.toDtoList(tasks);
+    }
+
+    @Override
+    public List<TaskResponseDto> getTaskFromStatus(TaskStatus taskStatus) {
+        List<Task> task = taskRepository.findByStatus(taskStatus);
+
+        return taskMapper.toDtoList(task);
     }
 
     @Override

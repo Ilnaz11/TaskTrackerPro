@@ -1,6 +1,7 @@
 package ru.baymukhametov.TaskTrackerPro.dto;
 
 import lombok.Data;
+import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
 
 import java.time.LocalDateTime;
 
@@ -9,4 +10,5 @@ public class TaskResponseDto {
     private String title;
     private String description;
     private LocalDateTime dueDate;
+    private TaskStatus taskStatus;
 }
