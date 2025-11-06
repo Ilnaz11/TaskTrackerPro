@@ -1,6 +1,8 @@
 package ru.baymukhametov.TaskTrackerPro.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
 import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
@@ -29,6 +31,11 @@ public class TaskController {
     @GetMapping("/{id}")
     public Optional<TaskResponseDto> findTaskById(Long id) {
         return taskService.findById(id);
+    }
+
+    @GetMapping("/tasks/paged")
+    public Page<TaskResponseDto> getPagedTasks(Long id, Pageable pageable) {
+        return taskService.getPagedTasks(id, pageable);
     }
 
     @GetMapping("/tasks/status/{status}")
@@ -62,5 +69,4 @@ public class TaskController {
                                       @RequestBody TaskStatusUpdateDto taskStatusUpdateDto) {
         return taskService.updateTask(id, taskCreateDto, taskStatusUpdateDto);
     }
-
 }

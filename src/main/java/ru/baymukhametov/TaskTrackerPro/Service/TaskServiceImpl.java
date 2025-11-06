@@ -1,6 +1,10 @@
 package ru.baymukhametov.TaskTrackerPro.Service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
@@ -94,4 +98,16 @@ public class TaskServiceImpl implements TaskService {
         List<Task> tasks = taskRepository.findByProject(project);
         return taskMapper.toDtoList(tasks);
     }
+
+    @Override
+    public Page<TaskResponseDto> getPagedTasks(Long id, Pageable pageable) {
+        Page<Task> tasks = taskRepository.findByTaskId(id, pageable);
+        return tasks.map(taskMapper::toDto);
+    }
 }
+
+//Этап 10. Пагинация и сортировка
+//1.	Добавь запрос /tasks/paged, который принимает параметры:
+//        o	page, size, sortBy, direction.
+//        2.	Реализуй вывод задач с разбивкой на страницы.
+
