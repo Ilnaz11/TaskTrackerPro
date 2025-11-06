@@ -9,6 +9,7 @@ import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
 import ru.baymukhametov.TaskTrackerPro.Service.TaskService;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
+import ru.baymukhametov.TaskTrackerPro.dto.TaskStatsDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskStatusUpdateDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.TaskMapper;
 
@@ -61,6 +62,11 @@ public class TaskController {
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
+    }
+
+    @GetMapping("/tasks/stats")
+    public TaskStatsDto getStats(TaskStatus taskStatus) {
+        return taskService.getStats(taskStatus);
     }
 
     @PutMapping("/update/{id}")

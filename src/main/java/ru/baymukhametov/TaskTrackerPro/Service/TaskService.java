@@ -7,6 +7,7 @@ import ru.baymukhametov.TaskTrackerPro.Entity.Task;
 import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
+import ru.baymukhametov.TaskTrackerPro.dto.TaskStatsDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskStatusUpdateDto;
 
 import java.util.List;
@@ -24,9 +25,14 @@ public interface TaskService {
     TaskResponseDto updateTask(Long id, TaskCreateDto taskCreateDto, TaskStatusUpdateDto taskStatusUpdateDto);
     List<TaskResponseDto> getTasksFromProject(Long id);
     Page<TaskResponseDto> getPagedTasks(Long id, Pageable pageable);
+    TaskStatsDto getStats(TaskStatus taskStatus);
 }
 
-//Этап 10. Пагинация и сортировка
-//1.	Добавь запрос /tasks/paged, который принимает параметры:
-//        o	page, size, sortBy, direction.
-//        2.	Реализуй вывод задач с разбивкой на страницы.
+//1.	Добавь эндпоинт /tasks/stats, который возвращает JSON:
+//{
+//  "totalTasks": ...,
+//  "newTasks": ...,
+//     "inProgressTasks": ...,
+//  "doneTasks": ...
+//}
+//Подсчёт делай через методы репозитория.
