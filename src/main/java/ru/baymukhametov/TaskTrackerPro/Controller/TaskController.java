@@ -1,13 +1,15 @@
 package ru.baymukhametov.TaskTrackerPro.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
 import ru.baymukhametov.TaskTrackerPro.Entity.TaskStatus;
 import ru.baymukhametov.TaskTrackerPro.Service.TaskService;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
+import ru.baymukhametov.TaskTrackerPro.dto.TaskStatsDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskStatusUpdateDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.TaskMapper;
 
@@ -32,6 +34,11 @@ public class TaskController {
         return taskService.findById(id);
     }
 
+    @GetMapping("/tasks/paged")
+    public Page<TaskResponseDto> getPagedTasks(Long id, Pageable pageable) {
+        return taskService.getPagedTasks(id, pageable);
+    }
+
     @GetMapping("/tasks/status/{status}")
     public List<TaskResponseDto> findByStatus(TaskStatus taskStatus) {
         return taskService.getTaskFromStatus(taskStatus);
@@ -47,9 +54,19 @@ public class TaskController {
         return taskService.getAllTasks();
     }
 
+    @GetMapping("/tasks/project/{projectId}")
+    public List<TaskResponseDto> getProjectTasks(Long id) {
+        return taskService.getTasksFromProject(id);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
+    }
+
+    @GetMapping("/tasks/stats")
+    public TaskStatsDto getStats(TaskStatus taskStatus) {
+        return taskService.getStats(taskStatus);
     }
 
     @PutMapping("/update/{id}")
@@ -58,11 +75,4 @@ public class TaskController {
                                       @RequestBody TaskStatusUpdateDto taskStatusUpdateDto) {
         return taskService.updateTask(id, taskCreateDto, taskStatusUpdateDto);
     }
-
 }
-
-//Этап 9. Фильтрация
-//Добавь в TaskController новые запросы:
-//1.	/tasks/status/{status} — получить задачи по статусу.
-//2.	/tasks/assignee/{userId} — получить задачи определённого пользователя.
-//3.	/tasks/project/{projectId} — получить задачи проекта.
