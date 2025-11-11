@@ -3,7 +3,9 @@ package ru.baymukhametov.TaskTrackerPro.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
+import ru.baymukhametov.TaskTrackerPro.Entity.User;
 import ru.baymukhametov.TaskTrackerPro.Repository.ProjectRepository;
+import ru.baymukhametov.TaskTrackerPro.Repository.UserRepository;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.ProjectMapper;
@@ -16,18 +18,21 @@ import java.util.Optional;
 public class ProjectServiceImpl implements  ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
     private final ProjectMapper projectMapper;
 
     @Override
     public ProjectResponseDto createProject(ProjectCreateDto project) {
         Long manager_id = project.getManagerId();
-        Project project2 = projectRepository.findById(manager_id)
+        User manager = userRepository.findById(manager_id)
                 .orElseThrow(() -> new RuntimeException("Not found Manager id: " + manager_id));
 
         Project project1 = new Project();
         project1.setName(project.getName());
         project1.setDescription(project.getDescription());
-        project1.setId(project.getManagerId());
+        project1.setManager(manager);
+        updateProject(manager_id, project);
+        updateProjectDescription(manager_id, project);
 
         Project savedProject = projectRepository.save(project1);
         return projectMapper.toDto(savedProject);

@@ -14,9 +14,9 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByStatus(TaskStatus status);
-    List<Task> findByUser(User user);
+    List<Task> findByExecutor(User executor);
     List<Task> findByProject(Project project);
-    Page<Task> findByTaskId(Long id, Pageable pageable);
+    Page<Task> findByTaskId(Long TaskId, Pageable pageable);
     Long countByStatus(TaskStatus taskStatus);
 }
 //1.	Добавь эндпоинт /tasks/stats, который возвращает JSON:

@@ -16,20 +16,22 @@ public class ProjectMapper {
 
             projectCreateDto.setName(project.getName());
             projectCreateDto.setDescription(project.getDescription());
-            projectCreateDto.setManagerId(project.getId());
+
+            if (project.getManager() != null) {
+                projectCreateDto.setManagerId(project.getManager().getId());
+            }
 
             return projectCreateDto;
     }
 
     public Project toEntity(ProjectCreateDto projectCreateDto) {
-        if (projectCreateDto != null) {
+        if (projectCreateDto == null) {
             return null;
         }
         Project project = new Project();
 
         project.setName(projectCreateDto.getName());
         project.setDescription(projectCreateDto.getDescription());
-        project.setId(projectCreateDto.getManagerId());
 
         return project;
     }

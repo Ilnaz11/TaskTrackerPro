@@ -10,7 +10,6 @@ import ru.baymukhametov.TaskTrackerPro.Service.TaskService;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskStatsDto;
-import ru.baymukhametov.TaskTrackerPro.dto.TaskStatusUpdateDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.TaskMapper;
 
 import java.util.List;
@@ -71,8 +70,7 @@ public class TaskController {
 
     @PutMapping("/update/{id}")
     public TaskResponseDto updateTask(@PathVariable Long id,
-                                      @RequestBody TaskCreateDto taskCreateDto,
-                                      @RequestBody TaskStatusUpdateDto taskStatusUpdateDto) {
-        return taskService.updateTask(id, taskCreateDto, taskStatusUpdateDto);
+                                      @RequestBody TaskCreateDto taskCreateDto) {
+        return taskService.updateTask(id, taskCreateDto);
     }
 }

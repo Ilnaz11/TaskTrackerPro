@@ -2,9 +2,7 @@ package ru.baymukhametov.TaskTrackerPro.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
@@ -16,7 +14,6 @@ import ru.baymukhametov.TaskTrackerPro.Repository.UserRepository;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskStatsDto;
-import ru.baymukhametov.TaskTrackerPro.dto.TaskStatusUpdateDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.TaskMapper;
 
 import java.util.List;
@@ -33,7 +30,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponseDto createTask(Task task) {
-        return taskMapper.toDto(task);
+        Task task1 = taskRepository.save(task);
+        return taskMapper.toDto(task1);
     }
 
     @Override
@@ -51,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskResponseDto> getTaskFromUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found User"));
-        List<Task> tasks = taskRepository.findByUser(user);
+        List<Task> tasks = taskRepository.findByExecutor(user);
 
         return taskMapper.toDtoList(tasks);
     }
@@ -71,9 +69,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskResponseDto updateTask(Long id, TaskCreateDto taskCreateDto, TaskStatusUpdateDto taskStatusUpdateDto) {
+    public TaskResponseDto updateTask(Long id, TaskCreateDto taskCreateDto) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found Task"));
+                .orElseThrow(() -> new RuntimeException("Task not found"));
 
         if (taskCreateDto.getTitle() != null) {
             task.setTitle(taskCreateDto.getTitle());
@@ -84,12 +82,12 @@ public class TaskServiceImpl implements TaskService {
         if (taskCreateDto.getDueDate() != null) {
             task.setDueDate(taskCreateDto.getDueDate());
         }
-        if (taskStatusUpdateDto.getStatus() != null) {
-            task.setStatus(taskStatusUpdateDto.getStatus());
+        if (taskCreateDto.getStatus() != null) {
+            task.setStatus(taskCreateDto.getStatus());
         }
 
-        Task updatedTask = taskRepository.save(task);
-        return taskMapper.toDto(updatedTask);
+        return taskMapper.toDto(taskRepository.save(task));
+
     }
 
     @Override
@@ -109,20 +107,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskStatsDto getStats(TaskStatus status) {
         long totalTasks = taskRepository.count();
-        long newTasks = taskRepository.countByStatus(status);
-        long inProgressTasks = taskRepository.countByStatus(status);
-        long doneTasks = taskRepository.countByStatus(status);
+        long newTasks = taskRepository.countByStatus(TaskStatus.NEW);
+        long inProgressTasks = taskRepository.countByStatus(TaskStatus.IN_PROGRESS);
+        long doneTasks = taskRepository.countByStatus(TaskStatus.DONE);
 
         return new TaskStatsDto(totalTasks, newTasks, inProgressTasks, doneTasks);
     }
 }
-
-//1.	Добавь эндпоинт /tasks/stats, который возвращает JSON:
-//        {
-//        "totalTasks": ...,
-//        "newTasks": ...,
-//        "inProgressTasks": ...,
-//        "doneTasks": ...
-//        }
-//Подсчёт делай через методы репозитория.
 

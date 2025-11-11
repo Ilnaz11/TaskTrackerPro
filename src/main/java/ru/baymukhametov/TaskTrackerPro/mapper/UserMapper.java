@@ -15,6 +15,7 @@ public class UserMapper {
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setName(user.getName());
         userResponseDto.setRole(user.getRole());
+        userResponseDto.setId(user.getId());
 
         return userResponseDto;
 
