@@ -11,12 +11,18 @@ import ru.baymukhametov.TaskTrackerPro.mapper.UserMapper;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
+
+
     @Override
     public UserResponseDto createUser(User user) {
         User user1 = userRepository.save(user);

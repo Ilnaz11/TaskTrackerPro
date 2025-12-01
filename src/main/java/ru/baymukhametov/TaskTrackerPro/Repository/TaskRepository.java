@@ -19,11 +19,4 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Page<Task> findByTaskId(Long TaskId, Pageable pageable);
     Long countByStatus(TaskStatus taskStatus);
 }
-//1.	Добавь эндпоинт /tasks/stats, который возвращает JSON:
-//{
-//  "totalTasks": ...,
-//  "newTasks": ...,
-//     "inProgressTasks": ...,
-//  "doneTasks": ...
-//}
-//Подсчёт делай через методы репозитория.
+

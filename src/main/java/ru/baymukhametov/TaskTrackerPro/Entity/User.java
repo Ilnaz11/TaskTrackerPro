@@ -1,14 +1,14 @@
 package ru.baymukhametov.TaskTrackerPro.Entity;
 
-import ru.baymukhametov.TaskTrackerPro.Entity.Role;
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Email;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {
@@ -17,8 +17,8 @@ public class User {
     private Long id;
     private String name;
     @Column(unique = true)
+    @Email
     private String email;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 

@@ -15,13 +15,18 @@ import ru.baymukhametov.TaskTrackerPro.mapper.TaskMapper;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @RequestMapping("/tasks")
 @RestController
 public class TaskController {
 
     private final TaskService taskService;
     private final TaskMapper taskMapper;
+
+    public TaskController(TaskService taskService, TaskMapper taskMapper) {
+        this.taskService = taskService;
+        this.taskMapper = taskMapper;
+
+    }
 
     @PostMapping
     public TaskResponseDto createTask(Task task) {

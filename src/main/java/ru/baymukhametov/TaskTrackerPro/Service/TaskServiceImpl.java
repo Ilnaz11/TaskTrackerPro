@@ -1,6 +1,5 @@
 package ru.baymukhametov.TaskTrackerPro.Service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import ru.baymukhametov.TaskTrackerPro.mapper.TaskMapper;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+
 @Service
 public class TaskServiceImpl implements TaskService {
 
@@ -27,6 +26,17 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+
+
+    public TaskServiceImpl(ProjectRepository projectRepository,
+                           UserRepository userRepository,
+                           TaskRepository taskRepository,
+                           TaskMapper taskMapper) {
+        this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
+        this.taskMapper = taskMapper;
+    }
 
     @Override
     public TaskResponseDto createTask(Task task) {
@@ -114,4 +124,3 @@ public class TaskServiceImpl implements TaskService {
         return new TaskStatsDto(totalTasks, newTasks, inProgressTasks, doneTasks);
     }
 }
-

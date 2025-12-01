@@ -1,11 +1,12 @@
 package ru.baymukhametov.TaskTrackerPro.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
 
 import java.util.List;
-
+@Component
 public class ProjectMapper {
 
     public ProjectResponseDto toDto(Project project) {

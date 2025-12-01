@@ -1,10 +1,12 @@
 package ru.baymukhametov.TaskTrackerPro.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.baymukhametov.TaskTrackerPro.Entity.User;
 import ru.baymukhametov.TaskTrackerPro.dto.UserResponseDto;
 
 import java.util.List;
 
+@Component
 public class UserMapper {
 
     public UserResponseDto toDto(User user) {

@@ -2,6 +2,7 @@ package ru.baymukhametov.TaskTrackerPro.Controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.baymukhametov.TaskTrackerPro.Service.ProjectService;
 import ru.baymukhametov.TaskTrackerPro.Service.ProjectServiceImpl;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
@@ -9,12 +10,15 @@ import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/projects")
 public class ProjectController {
 
-    private ProjectServiceImpl projectService;
+    private ProjectService projectService;
+
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @PostMapping
     public ProjectResponseDto createProject(@RequestBody ProjectCreateDto projectCreateDto) {

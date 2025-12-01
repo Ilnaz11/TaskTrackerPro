@@ -13,13 +13,19 @@ import ru.baymukhametov.TaskTrackerPro.mapper.ProjectMapper;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
 public class ProjectServiceImpl implements  ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final ProjectMapper projectMapper;
+
+    public ProjectServiceImpl(ProjectRepository projectRepository, UserRepository userRepository, ProjectMapper projectMapper) {
+        this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
+        this.projectMapper = projectMapper;
+    }
+
 
     @Override
     public ProjectResponseDto createProject(ProjectCreateDto project) {
@@ -32,7 +38,6 @@ public class ProjectServiceImpl implements  ProjectService {
         project1.setDescription(project.getDescription());
         project1.setManager(manager);
         updateProject(manager_id, project);
-        updateProjectDescription(manager_id, project);
 
         Project savedProject = projectRepository.save(project1);
         return projectMapper.toDto(savedProject);
