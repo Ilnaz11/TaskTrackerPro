@@ -1,6 +1,6 @@
 package ru.baymukhametov.TaskTrackerPro.Service;
 
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.Entity.User;
@@ -9,7 +9,6 @@ import ru.baymukhametov.TaskTrackerPro.Repository.UserRepository;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.ProjectMapper;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -37,9 +36,12 @@ public class ProjectServiceImpl implements  ProjectService {
         project1.setName(project.getName());
         project1.setDescription(project.getDescription());
         project1.setManager(manager);
-        updateProject(manager_id, project);
 
         Project savedProject = projectRepository.save(project1);
+
+        updateProject(savedProject.getId(), project);
+
+
         return projectMapper.toDto(savedProject);
     }
 

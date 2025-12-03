@@ -43,6 +43,8 @@ public class UserController {
                                       @RequestBody UserRequestDto userRequestDto) {
         return userService.updateUser(id, userRequestDto);
     }
-
-
 }
+//•	автоматическую установку статуса NEW при создании задачи;
+//•	дату создания проекта и задачи (createdAt);
+//•	валидацию: проверку, чтобы поля не были пустыми (@NotBlank, @NotNull);
+//•	логирование действий в консоль.

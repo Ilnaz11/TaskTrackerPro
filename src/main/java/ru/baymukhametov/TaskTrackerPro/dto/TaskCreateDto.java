@@ -11,6 +11,6 @@ public class TaskCreateDto {
     private String description;
     private LocalDateTime dueDate;
     private TaskStatus status;
-    private Long projectId;
-    private Long executorId;
+    private Long project_id;
+    private Long executor_id;
 }

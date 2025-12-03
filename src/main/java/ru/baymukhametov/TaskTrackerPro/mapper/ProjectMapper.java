@@ -13,10 +13,11 @@ public class ProjectMapper {
         if (project == null) {
             return null;
         }
-            ProjectResponseDto projectCreateDto = new ProjectResponseDto();
 
-            projectCreateDto.setName(project.getName());
-            projectCreateDto.setDescription(project.getDescription());
+        ProjectResponseDto projectCreateDto = new ProjectResponseDto();
+
+        projectCreateDto.setName(project.getName());
+        projectCreateDto.setDescription(project.getDescription());
 
             if (project.getManager() != null) {
                 projectCreateDto.setManagerId(project.getManager().getId());
@@ -24,6 +25,7 @@ public class ProjectMapper {
 
             return projectCreateDto;
     }
+
 
     public Project toEntity(ProjectCreateDto projectCreateDto) {
         if (projectCreateDto == null) {

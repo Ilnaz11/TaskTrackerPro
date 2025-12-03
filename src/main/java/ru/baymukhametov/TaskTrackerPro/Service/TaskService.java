@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface TaskService {
 
-    TaskResponseDto createTask(Task task);
+    TaskResponseDto createTask(TaskCreateDto taskCreateDto);
     List<TaskResponseDto> getAllTasks();
     void deleteTask(Long id);
     List<TaskResponseDto> getTaskFromUser(Long id);
@@ -23,5 +23,5 @@ public interface TaskService {
     TaskResponseDto updateTask(Long id, TaskCreateDto taskCreateDto);
     List<TaskResponseDto> getTasksFromProject(Long id);
     Page<TaskResponseDto> getPagedTasks(Long id, Pageable pageable);
-    TaskStatsDto getStats(TaskStatus taskStatus);
+    TaskStatsDto getStats();
 }

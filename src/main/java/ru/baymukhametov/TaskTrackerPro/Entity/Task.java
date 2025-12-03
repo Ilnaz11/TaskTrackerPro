@@ -14,12 +14,13 @@ import java.time.LocalDateTime;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long TaskId;
+    private Long taskId;
     private String title;
     private String description;
     private LocalDateTime dueDate;
+
     @Enumerated(EnumType.STRING)
-    private TaskStatus status = TaskStatus.NEW;
+    private TaskStatus status;
 
     @ManyToOne
     @JoinColumn(name = "executor_id")

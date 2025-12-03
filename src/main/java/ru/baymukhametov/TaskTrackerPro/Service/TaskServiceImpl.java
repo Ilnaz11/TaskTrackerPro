@@ -39,9 +39,29 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskResponseDto createTask(Task task) {
-        Task task1 = taskRepository.save(task);
-        return taskMapper.toDto(task1);
+    public TaskResponseDto createTask(TaskCreateDto taskCreateDto) {
+        Long project_id = taskCreateDto.getProject_id();
+        Long executorId = taskCreateDto.getExecutor_id();
+
+        Project project = projectRepository.findById(project_id)
+                .orElseThrow(() -> new RuntimeException("Not found project id: " + project_id));
+
+        User user = userRepository.findById(executorId)
+                .orElseThrow(() -> new RuntimeException("Not found Executor: " + executorId));
+
+        Task task = new Task();
+
+        task.setTitle(taskCreateDto.getTitle());
+        task.setDescription(taskCreateDto.getDescription());
+        task.setDueDate(taskCreateDto.getDueDate());
+        task.setStatus(taskCreateDto.getStatus());
+        task.setProject(project);
+        task.setExecutor(user);
+
+        Task savedTask = taskRepository.save(task);
+
+
+        return taskMapper.toDto(savedTask);
     }
 
     @Override
@@ -56,17 +76,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskResponseDto> getTaskFromUser(Long id) {
-        User user = userRepository.findById(id)
+    public List<TaskResponseDto> getTaskFromUser(Long userId) {
+        User executor = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Not found User"));
-        List<Task> tasks = taskRepository.findByExecutor(user);
+
+        List<Task> tasks = taskRepository.findByExecutor(executor);
 
         return taskMapper.toDtoList(tasks);
     }
 
     @Override
-    public List<TaskResponseDto> getTaskFromStatus(TaskStatus taskStatus) {
-        List<Task> task = taskRepository.findByStatus(taskStatus);
+    public List<TaskResponseDto> getTaskFromStatus(TaskStatus status) {
+        List<Task> task = taskRepository.findByStatus(status);
         return taskMapper.toDtoList(task);
     }
 
@@ -115,7 +136,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskStatsDto getStats(TaskStatus status) {
+    public TaskStatsDto getStats() {
         long totalTasks = taskRepository.count();
         long newTasks = taskRepository.countByStatus(TaskStatus.NEW);
         long inProgressTasks = taskRepository.countByStatus(TaskStatus.IN_PROGRESS);

@@ -40,10 +40,16 @@ public class ProjectController {
         projectService.deleteProject(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/description/{id}")
     public ProjectResponseDto updateProjectDescription(@PathVariable Long id,
                                                        @RequestBody ProjectCreateDto projectCreateDto) {
         return projectService.updateProjectDescription(id, projectCreateDto);
+    }
+
+    @PutMapping("/update/{id}")
+    public ProjectResponseDto updateProject(@PathVariable Long id,
+                                            @RequestBody ProjectCreateDto projectCreateDto) {
+        return projectService.updateProject(id, projectCreateDto);
     }
 
 }
