@@ -1,6 +1,6 @@
 package ru.baymukhametov.TaskTrackerPro.Service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.User;
 import ru.baymukhametov.TaskTrackerPro.Repository.UserRepository;
@@ -10,7 +10,7 @@ import ru.baymukhametov.TaskTrackerPro.mapper.UserMapper;
 
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto createUser(User user) {
         User user1 = userRepository.save(user);
+        log.info("User is created");
         return userMapper.toDto(user1);
     }
 
@@ -66,3 +67,9 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(updatedUser);
     }
 }
+
+//Если всё работает — добавь:
+//•	автоматическую установку статуса NEW при создании задачи;
+//•	дату создания проекта и задачи (createdAt);
+//•	валидацию: проверку, чтобы поля не были пустыми (@NotBlank, @NotNull);
+//•	логирование действий в консоль.

@@ -1,10 +1,7 @@
 package ru.baymukhametov.TaskTrackerPro.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
-import ru.baymukhametov.TaskTrackerPro.Entity.User;
-import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
 
 import java.util.List;

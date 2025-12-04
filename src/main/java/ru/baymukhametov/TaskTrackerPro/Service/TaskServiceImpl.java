@@ -55,6 +55,11 @@ public class TaskServiceImpl implements TaskService {
         task.setDescription(taskCreateDto.getDescription());
         task.setDueDate(taskCreateDto.getDueDate());
         task.setStatus(taskCreateDto.getStatus());
+
+        if (task.getStatus() == null) {
+            task.setStatus(TaskStatus.NEW);
+        }
+
         task.setProject(project);
         task.setExecutor(user);
 
