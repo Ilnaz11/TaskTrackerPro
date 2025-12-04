@@ -9,6 +9,8 @@ import ru.baymukhametov.TaskTrackerPro.Repository.UserRepository;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.ProjectMapper;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,7 @@ public class ProjectServiceImpl implements  ProjectService {
         project1.setName(project.getName());
         project1.setDescription(project.getDescription());
         project1.setManager(manager);
+        project1.setCreatedAt(project1.getCreatedAt());
 
         Project savedProject = projectRepository.save(project1);
 
@@ -73,6 +76,8 @@ public class ProjectServiceImpl implements  ProjectService {
         if (projectCreateDto.getDescription() != null) {
             project.setDescription(projectCreateDto.getDescription());
         }
+
+        project.setCreatedAt(LocalDateTime.now());
 
         Project updatedProject = projectRepository.save(project);
 

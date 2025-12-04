@@ -13,10 +13,12 @@ public class TaskMapper {
         if (task == null) {
             return null;
         }
+
         TaskResponseDto taskResponseDto = new TaskResponseDto();
+
         taskResponseDto.setTitle(task.getTitle());
         taskResponseDto.setDescription(task.getDescription());
-        taskResponseDto.setDueDate(task.getDueDate());
+        taskResponseDto.setDueDate(task.getCreated_At());
         taskResponseDto.setStatus(task.getStatus());
 
         if (task.getTaskId() != null) {

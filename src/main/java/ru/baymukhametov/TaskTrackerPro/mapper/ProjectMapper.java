@@ -18,6 +18,7 @@ public class ProjectMapper {
 
         projectCreateDto.setName(project.getName());
         projectCreateDto.setDescription(project.getDescription());
+        projectCreateDto.setDueDate(project.getCreatedAt());
 
             if (project.getManager() != null) {
                 projectCreateDto.setManagerId(project.getManager().getId());

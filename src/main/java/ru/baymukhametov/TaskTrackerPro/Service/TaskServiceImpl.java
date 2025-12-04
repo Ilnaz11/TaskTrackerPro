@@ -15,9 +15,11 @@ import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskStatsDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.TaskMapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+//•	дату создания проекта и задачи (createdAt);
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -53,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
 
         task.setTitle(taskCreateDto.getTitle());
         task.setDescription(taskCreateDto.getDescription());
-        task.setDueDate(taskCreateDto.getDueDate());
+        task.setCreated_At(task.getCreated_At());
         task.setStatus(taskCreateDto.getStatus());
 
         if (task.getStatus() == null) {
@@ -115,9 +117,9 @@ public class TaskServiceImpl implements TaskService {
         if (taskCreateDto.getDescription() != null) {
             task.setDescription(taskCreateDto.getDescription());
         }
-        if (taskCreateDto.getDueDate() != null) {
-            task.setDueDate(taskCreateDto.getDueDate());
-        }
+
+        task.setCreated_At(LocalDateTime.now());
+
         if (taskCreateDto.getStatus() != null) {
             task.setStatus(taskCreateDto.getStatus());
         }
