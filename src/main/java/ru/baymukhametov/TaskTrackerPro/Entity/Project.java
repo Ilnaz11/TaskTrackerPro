@@ -19,7 +19,8 @@ public class Project {
     private Long id;
     private String name;
     private String description;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt; // Дата создания
+    private LocalDateTime dueDate; // Срок проект
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 

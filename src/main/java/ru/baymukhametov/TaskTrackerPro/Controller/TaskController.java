@@ -1,5 +1,6 @@
 package ru.baymukhametov.TaskTrackerPro.Controller;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskResponseDto createTask(@RequestBody TaskCreateDto task) {
+    public TaskResponseDto createTask(@Valid @RequestBody TaskCreateDto task) {
         return taskService.createTask(task);
     }
 
@@ -69,7 +70,7 @@ public class TaskController {
     }
 
     @PutMapping("/update/{id}")
-    public TaskResponseDto updateTask(@PathVariable Long id,
+    public TaskResponseDto updateTask(@Valid @PathVariable Long id,
                                       @RequestBody TaskCreateDto taskCreateDto) {
         return taskService.updateTask(id, taskCreateDto);
     }

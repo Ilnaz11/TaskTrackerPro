@@ -1,9 +1,8 @@
 package ru.baymukhametov.TaskTrackerPro.Controller;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import ru.baymukhametov.TaskTrackerPro.Service.ProjectService;
-import ru.baymukhametov.TaskTrackerPro.Service.ProjectServiceImpl;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
 
@@ -21,7 +20,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ProjectResponseDto createProject(@RequestBody ProjectCreateDto projectCreateDto) {
+    public ProjectResponseDto createProject(@Valid @RequestBody ProjectCreateDto projectCreateDto) {
         return projectService.createProject(projectCreateDto);
     }
 

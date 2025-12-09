@@ -1,6 +1,5 @@
 package ru.baymukhametov.TaskTrackerPro.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,4 +10,5 @@ public class ProjectResponseDto {
     private String description;
     private Long managerId;
     private LocalDateTime dueDate;
+    private LocalDateTime createdAt;
 }

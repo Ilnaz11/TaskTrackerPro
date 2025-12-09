@@ -18,7 +18,8 @@ public class TaskMapper {
 
         taskResponseDto.setTitle(task.getTitle());
         taskResponseDto.setDescription(task.getDescription());
-        taskResponseDto.setDueDate(task.getCreated_At());
+        taskResponseDto.setDueDate(task.getDueDate());
+        taskResponseDto.setCreatedAt(task.getCreated_At());
         taskResponseDto.setStatus(task.getStatus());
 
         if (task.getTaskId() != null) {

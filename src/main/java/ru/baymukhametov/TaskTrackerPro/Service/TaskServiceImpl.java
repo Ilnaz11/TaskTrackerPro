@@ -1,5 +1,6 @@
 package ru.baymukhametov.TaskTrackerPro.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-//•	дату создания проекта и задачи (createdAt);
 
 @Service
+@Slf4j
 public class TaskServiceImpl implements TaskService {
 
     private final ProjectRepository projectRepository;
@@ -42,6 +43,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponseDto createTask(TaskCreateDto taskCreateDto) {
+        log.info("Create task");
         Long project_id = taskCreateDto.getProject_id();
         Long executorId = taskCreateDto.getExecutor_id();
 
@@ -55,10 +57,11 @@ public class TaskServiceImpl implements TaskService {
 
         task.setTitle(taskCreateDto.getTitle());
         task.setDescription(taskCreateDto.getDescription());
-        task.setCreated_At(task.getCreated_At());
+        task.setDueDate(taskCreateDto.getDueDate());
+        task.setCreated_At(LocalDateTime.now());
         task.setStatus(taskCreateDto.getStatus());
 
-        if (task.getStatus() == null) {
+        if (taskCreateDto.getStatus() == null) {
             task.setStatus(TaskStatus.NEW);
         }
 
@@ -73,17 +76,20 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskResponseDto> getAllTasks() {
+        log.info("Get all tasks");
         List<Task> tasks = taskRepository.findAll();
         return taskMapper.toDtoList(tasks);
     }
 
     @Override
     public void deleteTask(Long id) {
+        log.info("Delete user by id: {}", id);
         taskRepository.deleteById(id);
     }
 
     @Override
     public List<TaskResponseDto> getTaskFromUser(Long userId) {
+        log.info("Get task From User: {}", userId);
         User executor = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Not found User"));
 
@@ -94,12 +100,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskResponseDto> getTaskFromStatus(TaskStatus status) {
+        log.info("Get task from user status: {}", status);
         List<Task> task = taskRepository.findByStatus(status);
         return taskMapper.toDtoList(task);
     }
 
     @Override
     public Optional<TaskResponseDto> findById(Long id) {
+        log.info("Get task By id: {}", id);
         Optional<Task> optionalTask = taskRepository.findById(id);
         Task task = optionalTask.orElseThrow(() -> new RuntimeException("Not found Task id: " + id));
 
@@ -108,6 +116,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponseDto updateTask(Long id, TaskCreateDto taskCreateDto) {
+        log.info("Update task by id: {}", id);
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
@@ -118,7 +127,9 @@ public class TaskServiceImpl implements TaskService {
             task.setDescription(taskCreateDto.getDescription());
         }
 
-        task.setCreated_At(LocalDateTime.now());
+        if (taskCreateDto.getDueDate() != null) {
+            task.setDueDate(taskCreateDto.getDueDate());
+        }
 
         if (taskCreateDto.getStatus() != null) {
             task.setStatus(taskCreateDto.getStatus());
@@ -130,6 +141,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskResponseDto> getTasksFromProject(Long id) {
+        log.info("Get task by id: {}", id);
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found Project"));
         List<Task> tasks = taskRepository.findByProject(project);
@@ -138,12 +150,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<TaskResponseDto> getPagedTasks(Long id, Pageable pageable) {
+        log.info("Get paged tasks");
         Page<Task> tasks = taskRepository.findByTaskId(id, pageable);
         return tasks.map(taskMapper::toDto);
     }
 
     @Override
     public TaskStatsDto getStats() {
+        log.info("Get Stats");
         long totalTasks = taskRepository.count();
         long newTasks = taskRepository.countByStatus(TaskStatus.NEW);
         long inProgressTasks = taskRepository.countByStatus(TaskStatus.IN_PROGRESS);

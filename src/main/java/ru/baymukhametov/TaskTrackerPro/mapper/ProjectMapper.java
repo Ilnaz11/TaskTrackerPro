@@ -6,6 +6,7 @@ import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
 
 import java.util.List;
+
 @Component
 public class ProjectMapper {
 
@@ -18,7 +19,8 @@ public class ProjectMapper {
 
         projectCreateDto.setName(project.getName());
         projectCreateDto.setDescription(project.getDescription());
-        projectCreateDto.setDueDate(project.getCreatedAt());
+        projectCreateDto.setCreatedAt(project.getCreatedAt());
+        projectCreateDto.setDueDate(project.getDueDate());
 
             if (project.getManager() != null) {
                 projectCreateDto.setManagerId(project.getManager().getId());

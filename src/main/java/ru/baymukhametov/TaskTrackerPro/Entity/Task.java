@@ -18,6 +18,7 @@ public class Task {
     private String title;
     private String description;
     private LocalDateTime created_At;
+    private LocalDateTime dueDate;
 
     @Enumerated(EnumType.STRING)
     private TaskStatus status;

@@ -1,6 +1,7 @@
 package ru.baymukhametov.TaskTrackerPro.Service;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.Entity.User;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ProjectServiceImpl implements  ProjectService {
 
@@ -30,6 +32,7 @@ public class ProjectServiceImpl implements  ProjectService {
 
     @Override
     public ProjectResponseDto createProject(ProjectCreateDto project) {
+        log.info("Create project");
         Long manager_id = project.getManagerId();
         User manager = userRepository.findById(manager_id)
                 .orElseThrow(() -> new RuntimeException("Not found Manager id: " + manager_id));
@@ -38,7 +41,8 @@ public class ProjectServiceImpl implements  ProjectService {
         project1.setName(project.getName());
         project1.setDescription(project.getDescription());
         project1.setManager(manager);
-        project1.setCreatedAt(project1.getCreatedAt());
+        project1.setCreatedAt(LocalDateTime.now());
+        project1.setDueDate(project.getDueDate());
 
         Project savedProject = projectRepository.save(project1);
 
@@ -50,17 +54,20 @@ public class ProjectServiceImpl implements  ProjectService {
 
     @Override
     public List<ProjectResponseDto> getAllProjects() {
+        log.info("Get all projects");
         List<Project> projects = projectRepository.findAll();
         return projectMapper.toDtoList(projects);
     }
 
     @Override
     public void deleteProject(Long id) {
+        log.info("Delete project by id: {}", id);
         projectRepository.deleteById(id);
     }
 
     @Override
     public Optional<ProjectResponseDto> getProjectById(Long id) {
+        log.info("Get project By id: {}", id);
         Optional<Project> projectOptional = projectRepository.findById(id);
         return projectOptional.map(projectMapper::toDto);
     }
@@ -68,6 +75,7 @@ public class ProjectServiceImpl implements  ProjectService {
 
     @Override
     public ProjectResponseDto updateProject(Long id, ProjectCreateDto projectCreateDto) {
+        log.info("Update project by id: {}", id);
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found project id: " + id));
         if (projectCreateDto.getName() != null) {
@@ -77,7 +85,9 @@ public class ProjectServiceImpl implements  ProjectService {
             project.setDescription(projectCreateDto.getDescription());
         }
 
-        project.setCreatedAt(LocalDateTime.now());
+        if (projectCreateDto.getDueDate() != null) {
+            project.setDueDate(projectCreateDto.getDueDate());
+        }
 
         Project updatedProject = projectRepository.save(project);
 
@@ -86,6 +96,7 @@ public class ProjectServiceImpl implements  ProjectService {
 
     @Override
     public ProjectResponseDto updateProjectDescription(Long id, ProjectCreateDto projectCreateDto) {
+        log.info("UpdateDescription project by id: {}", id);
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found project id: " + id));
         if (projectCreateDto.getDescription() != null) {

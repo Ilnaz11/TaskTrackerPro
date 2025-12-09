@@ -12,3 +12,4 @@ public class TaskTrackerProApplication {
 		SpringApplication.run(TaskTrackerProApplication.class, args);
 	}
 }
+//•	логирование действий в консоль.
