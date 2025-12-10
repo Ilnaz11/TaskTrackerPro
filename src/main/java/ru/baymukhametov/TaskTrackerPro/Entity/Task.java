@@ -1,26 +1,27 @@
 package ru.baymukhametov.TaskTrackerPro.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "tasks")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long taskId;
     private String title;
     private String description;
+    private LocalDateTime created_At;
     private LocalDateTime dueDate;
+
     @Enumerated(EnumType.STRING)
-    private TaskStatus status = TaskStatus.NEW;
+    private TaskStatus status;
 
     @ManyToOne
     @JoinColumn(name = "executor_id")

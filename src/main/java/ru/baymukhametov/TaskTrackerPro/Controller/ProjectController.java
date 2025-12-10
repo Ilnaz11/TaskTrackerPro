@@ -1,23 +1,26 @@
 package ru.baymukhametov.TaskTrackerPro.Controller;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-import ru.baymukhametov.TaskTrackerPro.Service.ProjectServiceImpl;
+import ru.baymukhametov.TaskTrackerPro.Service.ProjectService;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/projects")
 public class ProjectController {
 
-    private ProjectServiceImpl projectService;
+    private ProjectService projectService;
+
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @PostMapping
-    public ProjectResponseDto createProject(@RequestBody ProjectCreateDto projectCreateDto) {
+    public ProjectResponseDto createProject(@Valid @RequestBody ProjectCreateDto projectCreateDto) {
         return projectService.createProject(projectCreateDto);
     }
 
@@ -36,10 +39,16 @@ public class ProjectController {
         projectService.deleteProject(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/description/{id}")
     public ProjectResponseDto updateProjectDescription(@PathVariable Long id,
                                                        @RequestBody ProjectCreateDto projectCreateDto) {
         return projectService.updateProjectDescription(id, projectCreateDto);
+    }
+
+    @PutMapping("/update/{id}")
+    public ProjectResponseDto updateProject(@PathVariable Long id,
+                                            @RequestBody ProjectCreateDto projectCreateDto) {
+        return projectService.updateProject(id, projectCreateDto);
     }
 
 }

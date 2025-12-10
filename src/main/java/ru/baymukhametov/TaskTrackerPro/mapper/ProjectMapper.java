@@ -1,35 +1,43 @@
 package ru.baymukhametov.TaskTrackerPro.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.ProjectResponseDto;
 
 import java.util.List;
 
+@Component
 public class ProjectMapper {
 
     public ProjectResponseDto toDto(Project project) {
         if (project == null) {
             return null;
         }
-            ProjectResponseDto projectCreateDto = new ProjectResponseDto();
 
-            projectCreateDto.setName(project.getName());
-            projectCreateDto.setDescription(project.getDescription());
-            projectCreateDto.setManagerId(project.getId());
+        ProjectResponseDto projectCreateDto = new ProjectResponseDto();
+
+        projectCreateDto.setName(project.getName());
+        projectCreateDto.setDescription(project.getDescription());
+        projectCreateDto.setCreatedAt(project.getCreatedAt());
+        projectCreateDto.setDueDate(project.getDueDate());
+
+            if (project.getManager() != null) {
+                projectCreateDto.setManagerId(project.getManager().getId());
+            }
 
             return projectCreateDto;
     }
 
+
     public Project toEntity(ProjectCreateDto projectCreateDto) {
-        if (projectCreateDto != null) {
+        if (projectCreateDto == null) {
             return null;
         }
         Project project = new Project();
 
         project.setName(projectCreateDto.getName());
         project.setDescription(projectCreateDto.getDescription());
-        project.setId(projectCreateDto.getManagerId());
 
         return project;
     }

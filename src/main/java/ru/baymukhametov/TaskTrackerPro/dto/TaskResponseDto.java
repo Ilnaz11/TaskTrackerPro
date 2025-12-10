@@ -7,8 +7,12 @@ import java.time.LocalDateTime;
 
 @Data
 public class TaskResponseDto {
+    private Long id;
     private String title;
     private String description;
+    private LocalDateTime createdAt;
     private LocalDateTime dueDate;
-    private TaskStatus taskStatus;
+    private TaskStatus status;
+    private Long project_id;
+    private Long executor_id;
 }

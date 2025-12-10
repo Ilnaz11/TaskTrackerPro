@@ -1,10 +1,8 @@
 package ru.baymukhametov.TaskTrackerPro.Service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.baymukhametov.TaskTrackerPro.Entity.Project;
 import ru.baymukhametov.TaskTrackerPro.Entity.Task;
@@ -16,14 +14,15 @@ import ru.baymukhametov.TaskTrackerPro.Repository.UserRepository;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskCreateDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskResponseDto;
 import ru.baymukhametov.TaskTrackerPro.dto.TaskStatsDto;
-import ru.baymukhametov.TaskTrackerPro.dto.TaskStatusUpdateDto;
 import ru.baymukhametov.TaskTrackerPro.mapper.TaskMapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+
 @Service
+@Slf4j
 public class TaskServiceImpl implements TaskService {
 
     private final ProjectRepository projectRepository;
@@ -31,39 +30,84 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
 
+
+    public TaskServiceImpl(ProjectRepository projectRepository,
+                           UserRepository userRepository,
+                           TaskRepository taskRepository,
+                           TaskMapper taskMapper) {
+        this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
+        this.taskMapper = taskMapper;
+    }
+
     @Override
-    public TaskResponseDto createTask(Task task) {
-        return taskMapper.toDto(task);
+    public TaskResponseDto createTask(TaskCreateDto taskCreateDto) {
+        log.info("Create task");
+        Long project_id = taskCreateDto.getProject_id();
+        Long executorId = taskCreateDto.getExecutor_id();
+
+        Project project = projectRepository.findById(project_id)
+                .orElseThrow(() -> new RuntimeException("Not found project id: " + project_id));
+
+        User user = userRepository.findById(executorId)
+                .orElseThrow(() -> new RuntimeException("Not found Executor: " + executorId));
+
+        Task task = new Task();
+
+        task.setTitle(taskCreateDto.getTitle());
+        task.setDescription(taskCreateDto.getDescription());
+        task.setDueDate(taskCreateDto.getDueDate());
+        task.setCreated_At(LocalDateTime.now());
+        task.setStatus(taskCreateDto.getStatus());
+
+        if (taskCreateDto.getStatus() == null) {
+            task.setStatus(TaskStatus.NEW);
+        }
+
+        task.setProject(project);
+        task.setExecutor(user);
+
+        Task savedTask = taskRepository.save(task);
+
+
+        return taskMapper.toDto(savedTask);
     }
 
     @Override
     public List<TaskResponseDto> getAllTasks() {
+        log.info("Get all tasks");
         List<Task> tasks = taskRepository.findAll();
         return taskMapper.toDtoList(tasks);
     }
 
     @Override
     public void deleteTask(Long id) {
+        log.info("Delete user by id: {}", id);
         taskRepository.deleteById(id);
     }
 
     @Override
-    public List<TaskResponseDto> getTaskFromUser(Long id) {
-        User user = userRepository.findById(id)
+    public List<TaskResponseDto> getTaskFromUser(Long userId) {
+        log.info("Get task From User: {}", userId);
+        User executor = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Not found User"));
-        List<Task> tasks = taskRepository.findByUser(user);
+
+        List<Task> tasks = taskRepository.findByExecutor(executor);
 
         return taskMapper.toDtoList(tasks);
     }
 
     @Override
-    public List<TaskResponseDto> getTaskFromStatus(TaskStatus taskStatus) {
-        List<Task> task = taskRepository.findByStatus(taskStatus);
+    public List<TaskResponseDto> getTaskFromStatus(TaskStatus status) {
+        log.info("Get task from user status: {}", status);
+        List<Task> task = taskRepository.findByStatus(status);
         return taskMapper.toDtoList(task);
     }
 
     @Override
     public Optional<TaskResponseDto> findById(Long id) {
+        log.info("Get task By id: {}", id);
         Optional<Task> optionalTask = taskRepository.findById(id);
         Task task = optionalTask.orElseThrow(() -> new RuntimeException("Not found Task id: " + id));
 
@@ -71,9 +115,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskResponseDto updateTask(Long id, TaskCreateDto taskCreateDto, TaskStatusUpdateDto taskStatusUpdateDto) {
+    public TaskResponseDto updateTask(Long id, TaskCreateDto taskCreateDto) {
+        log.info("Update task by id: {}", id);
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found Task"));
+                .orElseThrow(() -> new RuntimeException("Task not found"));
 
         if (taskCreateDto.getTitle() != null) {
             task.setTitle(taskCreateDto.getTitle());
@@ -81,19 +126,22 @@ public class TaskServiceImpl implements TaskService {
         if (taskCreateDto.getDescription() != null) {
             task.setDescription(taskCreateDto.getDescription());
         }
+
         if (taskCreateDto.getDueDate() != null) {
             task.setDueDate(taskCreateDto.getDueDate());
         }
-        if (taskStatusUpdateDto.getStatus() != null) {
-            task.setStatus(taskStatusUpdateDto.getStatus());
+
+        if (taskCreateDto.getStatus() != null) {
+            task.setStatus(taskCreateDto.getStatus());
         }
 
-        Task updatedTask = taskRepository.save(task);
-        return taskMapper.toDto(updatedTask);
+        return taskMapper.toDto(taskRepository.save(task));
+
     }
 
     @Override
     public List<TaskResponseDto> getTasksFromProject(Long id) {
+        log.info("Get task by id: {}", id);
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found Project"));
         List<Task> tasks = taskRepository.findByProject(project);
@@ -102,27 +150,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<TaskResponseDto> getPagedTasks(Long id, Pageable pageable) {
+        log.info("Get paged tasks");
         Page<Task> tasks = taskRepository.findByTaskId(id, pageable);
         return tasks.map(taskMapper::toDto);
     }
 
     @Override
-    public TaskStatsDto getStats(TaskStatus status) {
+    public TaskStatsDto getStats() {
+        log.info("Get Stats");
         long totalTasks = taskRepository.count();
-        long newTasks = taskRepository.countByStatus(status);
-        long inProgressTasks = taskRepository.countByStatus(status);
-        long doneTasks = taskRepository.countByStatus(status);
+        long newTasks = taskRepository.countByStatus(TaskStatus.NEW);
+        long inProgressTasks = taskRepository.countByStatus(TaskStatus.IN_PROGRESS);
+        long doneTasks = taskRepository.countByStatus(TaskStatus.DONE);
 
         return new TaskStatsDto(totalTasks, newTasks, inProgressTasks, doneTasks);
     }
 }
-
-//1.	Добавь эндпоинт /tasks/stats, который возвращает JSON:
-//        {
-//        "totalTasks": ...,
-//        "newTasks": ...,
-//        "inProgressTasks": ...,
-//        "doneTasks": ...
-//        }
-//Подсчёт делай через методы репозитория.
-
